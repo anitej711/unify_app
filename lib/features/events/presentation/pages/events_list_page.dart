@@ -76,11 +76,7 @@ class EventsListPage extends ConsumerWidget {
               },
             );
           },
-          loading: () => ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            itemCount: 4,
-            itemBuilder: (context, index) => _buildSkeletonCard(),
-          ),
+          loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF7C3AED))),
           error: (err, stack) => SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: SizedBox(
@@ -182,8 +178,9 @@ class EventsListPage extends ConsumerWidget {
       margin: const EdgeInsets.only(bottom: 16),
       height: 250,
       decoration: BoxDecoration(
-        color: const Color(0xFF1B1B26),
+        color: const Color(0xFF13131D),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFF2B2B36)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -191,7 +188,7 @@ class EventsListPage extends ConsumerWidget {
           Container(
             height: 120,
             decoration: const BoxDecoration(
-              color: Color(0xFF2B2B36),
+              color: Color(0xFF0A0A0F),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
@@ -203,11 +200,11 @@ class EventsListPage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(height: 20, width: 200, color: const Color(0xFF2B2B36)),
+                Container(height: 20, width: 200, color: const Color(0xFF0A0A0F)),
                 const SizedBox(height: 12),
-                Container(height: 14, width: double.infinity, color: const Color(0xFF2B2B36)),
+                Container(height: 14, width: double.infinity, color: const Color(0xFF0A0A0F)),
                 const SizedBox(height: 6),
-                Container(height: 14, width: 150, color: const Color(0xFF2B2B36)),
+                Container(height: 14, width: 150, color: const Color(0xFF0A0A0F)),
               ],
             ),
           )

@@ -81,7 +81,7 @@ class _R2ImageWidgetState extends ConsumerState<R2ImageWidget> {
             height: widget.height,
             width: widget.width,
             decoration: BoxDecoration(
-              color: const Color(0xFF2B2B36),
+              color: const Color(0xFF0A0A0F),
               borderRadius: BorderRadius.circular(widget.borderRadius),
             ),
           ),
@@ -96,9 +96,9 @@ class _R2ImageWidgetState extends ConsumerState<R2ImageWidget> {
       height: widget.height,
       width: widget.width,
       decoration: BoxDecoration(
-        color: const Color(0xFF2B2B36),
+        color: const Color(0xFF0A0A0F),
         borderRadius: BorderRadius.circular(widget.borderRadius),
-        border: const Border(bottom: BorderSide(color: Colors.white10)),
+        border: Border.all(color: const Color(0xFF1B1B26)),
       ),
       child: const Center(
         child: Icon(

@@ -137,12 +137,19 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                                 width: 44,
                                 height: 44,
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: const Color(0xFFFF1C7C).withOpacity(0.5), width: 1.5),
-                                  image: DecorationImage(
-                                    image: NetworkImage('https://api.dicebear.com/7.x/identicon/png?seed=${user?.username ?? "Guest"}&backgroundColor=1B1B26'),
-                                    fit: BoxFit.cover,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: const Color(0xFF7C3AED).withOpacity(0.5), width: 2),
+                                  gradient: const LinearGradient(
+                                    colors: [Color(0xFF7C3AED), Color(0xFFE81CFF)],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                  boxShadow: [BoxShadow(color: const Color(0xFF7C3AED).withOpacity(0.3), blurRadius: 10, spreadRadius: 2)],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    (user?.username != null && user!.username.isNotEmpty) ? user.username[0].toUpperCase() : 'G',
+                                    style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                                   ),
                                 ),
                               ),
@@ -287,16 +294,7 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                             },
                           );
                         },
-                        loading: () => ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          itemCount: 3,
-                          separatorBuilder: (_, __) => const SizedBox(width: 16),
-                          itemBuilder: (_, __) => Container(
-                            width: 300,
-                            decoration: BoxDecoration(color: const Color(0xFF1B1B26), borderRadius: BorderRadius.circular(16)),
-                          ),
-                        ),
+                        loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF00E5FF))),
                         error: (err, stack) => Center(child: Text('ERROR_CODE: $err', style: GoogleFonts.spaceMono(color: Colors.redAccent))),
                       ),
                     ),
