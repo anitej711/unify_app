@@ -40,7 +40,7 @@ class _BookingSuccessPageState extends State<BookingSuccessPage> with TickerProv
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
+      backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Center(
           child: Padding(

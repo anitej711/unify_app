@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
+import '../widgets/cyber_grid_background.dart';
 
 class MainLayout extends ConsumerStatefulWidget {
   final StatefulNavigationShell navigationShell;
@@ -73,43 +74,45 @@ class _MainLayoutState extends ConsumerState<MainLayout> with TickerProviderStat
     final currentIndex = availableRoutes.indexOf(currentRoute) != -1 ? availableRoutes.indexOf(currentRoute) : 0;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
-      body: Stack(
-        children: [
-          widget.navigationShell,
-          
-          // Floating Navbar
-          Positioned(
-            left: 16,
-            right: 16,
-            bottom: 24,
-            child: _buildFloatingNavbar(tabs, currentIndex, availableRoutes),
-          ),
-        ],
+      backgroundColor: Colors.transparent, // Color is managed by CyberGridBackground
+      body: CyberGridBackground(
+        child: Stack(
+          children: [
+            widget.navigationShell,
+            
+            // Floating Navbar
+            Positioned(
+              left: 16,
+              right: 16,
+              bottom: 24,
+              child: _buildFloatingNavbar(tabs, currentIndex, availableRoutes),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildFloatingNavbar(List<Map<String, dynamic>> tabs, int currentIndex, List<String> availableRoutes) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(40),
+      borderRadius: BorderRadius.circular(24),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           height: 70,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           decoration: BoxDecoration(
-            color: const Color(0xFF1B1B26).withOpacity(0.6),
-            borderRadius: BorderRadius.circular(40),
+            color: const Color(0xFF13131D).withOpacity(0.7),
+            borderRadius: BorderRadius.circular(24),
             border: Border.all(
-              color: const Color(0xFF7C3AED).withOpacity(0.3),
-              width: 1.5,
+              color: Colors.white.withOpacity(0.05),
+              width: 1.0,
             ),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF7C3AED).withOpacity(0.2),
-                blurRadius: 20,
-                spreadRadius: 2,
+                color: const Color(0xFFE81CFF).withOpacity(0.1),
+                blurRadius: 30,
+                spreadRadius: -5,
                 offset: const Offset(0, 5),
               )
             ],
@@ -135,23 +138,23 @@ class _MainLayoutState extends ConsumerState<MainLayout> with TickerProviderStat
                           duration: const Duration(milliseconds: 300),
                           child: Icon(
                             isSelected ? tab['activeIcon'] : tab['icon'],
-                            color: isSelected ? const Color(0xFF7C3AED) : Colors.white54,
+                            color: isSelected ? const Color(0xFF00E5FF) : Colors.white24,
                             size: 24,
                           ),
                         ),
                         if (isSelected) ...[
                           const SizedBox(height: 4),
                           Container(
-                            width: 6,
-                            height: 6,
-                            decoration: const BoxDecoration(
-                              color: Color(0xFF7C3AED),
-                              shape: BoxShape.circle,
-                              boxShadow: [
+                            width: 16,
+                            height: 3,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF00E5FF),
+                              borderRadius: BorderRadius.circular(2),
+                              boxShadow: const [
                                 BoxShadow(
-                                  color: Color(0xFF7C3AED),
+                                  color: Color(0xFF00E5FF),
                                   blurRadius: 8,
-                                  spreadRadius: 2,
+                                  spreadRadius: 1,
                                 )
                               ]
                             ),

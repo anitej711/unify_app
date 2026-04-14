@@ -15,7 +15,7 @@ class CartPage extends ConsumerWidget {
     final cartAsync = ref.watch(cartDataProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Your Cart', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,

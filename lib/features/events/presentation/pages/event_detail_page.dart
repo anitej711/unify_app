@@ -29,7 +29,7 @@ class EventDetailPage extends ConsumerWidget {
     final isOrganiser = false; // We can check role via AuthState if needed.
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
+      backgroundColor: Colors.transparent,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(

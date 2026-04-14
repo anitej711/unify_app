@@ -13,7 +13,7 @@ class CheckoutPage extends ConsumerWidget {
     final cartAsync = ref.watch(cartDataProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),

@@ -21,7 +21,7 @@ class EventsListPage extends ConsumerWidget {
     final filteredEventsAsync = ref.watch(filteredEventsProvider(type));
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

@@ -12,7 +12,7 @@ class BookingsPage extends ConsumerWidget {
     final bookingsAsync = ref.watch(myBookingsProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0A0A0F),
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('My Bookings', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
