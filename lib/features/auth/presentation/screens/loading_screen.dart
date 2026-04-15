@@ -67,7 +67,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
       setState(() => _visibleCount++);
     });
 
-    Future.delayed(const Duration(milliseconds: 6000), () {
+    Future.delayed(const Duration(milliseconds: 5000), () {
       if (mounted) {
         ref.read(authProvider.notifier).checkAuth();
       }
@@ -181,7 +181,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
                                   width: _dotR * 2, height: _dotR * 2,
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Color(0xFFC5E86C),
+                                    color: Color(0xFFFF1C7C),
                                   ),
                                 ),
                               ),
@@ -210,7 +210,7 @@ class _LoadingScreenState extends ConsumerState<LoadingScreen>
                           fontSize:      13,
                           fontWeight:    FontWeight.w500,
                           letterSpacing: 1.8,
-                          color: const Color(0xFFC5E86C).withOpacity(0.6),
+                          color: const Color(0xFFFF1C7C).withOpacity(0.6),
                         ),
                       ),
                     ),
@@ -261,7 +261,7 @@ class _LetterBox extends StatelessWidget {
         style: GoogleFonts.sora(
           fontSize:      _kFontSize,
           fontWeight:    FontWeight.w900,
-          color:         const Color(0xFFC5E86C),
+          color:         const Color(0xFFFF1C7C),
           letterSpacing: _kLetterSpace,
           height:        1,
         ),
@@ -277,7 +277,7 @@ class _DropletPainter extends CustomPainter {
   final Offset target;
   final double sw, sh;
 
-  static const _lime = Color(0xFFC5E86C);
+  static const _lime = Color(0xFFFF1C7C);
 
   const _DropletPainter({
     required this.t, required this.target,
@@ -428,7 +428,7 @@ class _DropletPainter extends CustomPainter {
 class _SplatPainter extends CustomPainter {
   final double t;
   final Offset centre;
-  static const _lime = Color(0xFFC5E86C);
+  static const _lime = Color(0xFFFF1C7C);
 
   const _SplatPainter({required this.t, required this.centre});
 

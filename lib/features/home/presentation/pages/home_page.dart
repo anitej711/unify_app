@@ -56,26 +56,26 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Protocol Text & Welcome
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'PROTOCOL: CITIZEN_DASHBOARD',
-                              style: GoogleFonts.spaceMono(
-                                color: Colors.white54,
-                                fontSize: 10,
-                                letterSpacing: 2.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            RichText(
+                      Text(
+                        'USER_DASHBOARD',
+                        style: GoogleFonts.spaceMono(
+                          color: Colors.white54,
+                          fontSize: 10,
+                          letterSpacing: 2.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      // Welcome text & Avatar row horizontally centered
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: RichText(
                               text: TextSpan(
                                 children: [
                                   TextSpan(
@@ -97,66 +97,39 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
                                 ],
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                      
-                      // System Status Badge & Avatar
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF00E5FF).withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: const Color(0xFF00E5FF).withOpacity(0.3)),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.show_chart, color: Color(0xFF00E5FF), size: 12),
-                                const SizedBox(width: 6),
-                                Text(
-                                  'SYSTEM: ONLINE',
-                                  style: GoogleFonts.spaceMono(
-                                    color: const Color(0xFF00E5FF),
-                                    fontSize: 8,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
-                          const SizedBox(height: 12),
-                          Hero(
-                            tag: 'profile_avatar',
-                            child: GestureDetector(
-                              onTap: () => context.go('/profile'),
-                              child: Container(
-                                width: 44,
-                                height: 44,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border: Border.all(color: const Color(0xFF7C3AED).withOpacity(0.5), width: 2),
-                                  gradient: const LinearGradient(
-                                    colors: [Color(0xFF7C3AED), Color(0xFFE81CFF)],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
+                          // Avatar
+                          Transform.translate(
+                            offset: const Offset(0, -7),
+                            child: Hero(
+                              tag: 'profile_avatar',
+                              child: GestureDetector(
+                                onTap: () => context.go('/profile'),
+                                child: Container(
+                                  width: 44,
+                                  height: 44,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: const Color(0xFF7C3AED).withOpacity(0.5), width: 2),
+                                    gradient: const LinearGradient(
+                                      colors: [Color(0xFF7C3AED), Color(0xFFE81CFF)],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    boxShadow: [BoxShadow(color: const Color(0xFF7C3AED).withOpacity(0.3), blurRadius: 10, spreadRadius: 2)],
                                   ),
-                                  boxShadow: [BoxShadow(color: const Color(0xFF7C3AED).withOpacity(0.3), blurRadius: 10, spreadRadius: 2)],
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    (user?.username != null && user!.username.isNotEmpty) ? user.username[0].toUpperCase() : 'G',
-                                    style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                                  child: Center(
+                                    child: Text(
+                                      (user?.username != null && user!.username.isNotEmpty) ? user.username[0].toUpperCase() : 'G',
+                                      style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -180,12 +153,9 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               SliverToBoxAdapter(
                 child: FadeTransition(
                   opacity: CurvedAnimation(parent: _animController, curve: const Interval(0.0, 0.4)),
-                  child: SizedBox(
-                    height: 220,
-                    child: ListView(
-                      physics: const BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
                       children: [
                         _buildDomainCard(
                           context, 
@@ -315,24 +285,22 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
     return GestureDetector(
       onTap: () => context.push(route),
       child: Container(
-        width: 180,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
-        padding: const EdgeInsets.all(20),
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         decoration: BoxDecoration(
           color: const Color(0xFF13131D),
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.white.withOpacity(0.05)),
           boxShadow: [
             BoxShadow(
               color: gradientColors.first.withOpacity(0.08),
-              blurRadius: 20,
+              blurRadius: 15,
               spreadRadius: -5,
             )
           ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Row(
           children: [
             // Glowing Icon
             Container(
@@ -356,43 +324,44 @@ class _HomePageState extends ConsumerState<HomePage> with SingleTickerProviderSt
               child: Icon(icon, color: Colors.white, size: 28),
             ),
             
+            const SizedBox(width: 16),
+            
             // Text Details
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  subtitle,
-                  style: GoogleFonts.spaceMono(
-                    color: gradientColors.first,
-                    fontSize: 8,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  title,
-                  style: GoogleFonts.bebasNeue(
-                    color: Colors.white,
-                    fontSize: 26,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Text(
-                      'ENTER NODE',
-                      style: GoogleFonts.spaceMono(
-                        color: Colors.white54,
-                        fontSize: 10,
-                        letterSpacing: 1.0,
-                      ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: GoogleFonts.bebasNeue(
+                      color: Colors.white,
+                      fontSize: 24,
+                      letterSpacing: 1.0,
                     ),
-                    const SizedBox(width: 8),
-                    Icon(Icons.arrow_forward, size: 14, color: gradientColors.first),
-                  ],
-                ),
-              ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: GoogleFonts.spaceMono(
+                      color: gradientColors.first,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            
+            // Enter Arrow Button
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: gradientColors.first.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.arrow_forward_ios, size: 14, color: gradientColors.first),
             ),
           ],
         ),

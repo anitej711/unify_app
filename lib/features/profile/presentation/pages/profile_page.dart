@@ -50,7 +50,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
     final initial = username.isNotEmpty ? username[0].toUpperCase() : 'G';
 
     return Scaffold(
-      backgroundColor: const Color(0xFF06060A),
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
           // Background Gradient
@@ -112,17 +112,35 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
                             const SizedBox(height: 8),
                             Text(email, style: const TextStyle(color: Colors.white54, fontSize: 16)),
                             const SizedBox(height: 24),
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF7C3AED).withOpacity(0.2),
-                                elevation: 0,
-                                side: BorderSide(color: const Color(0xFF7C3AED).withOpacity(0.5)),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                              ),
-                              onPressed: () => _showEditProfileModal(context, username, email),
-                              icon: const Icon(Icons.edit, size: 18, color: Colors.white),
-                              label: const Text('Edit Profile', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF7C3AED).withOpacity(0.2),
+                                    elevation: 0,
+                                    side: BorderSide(color: const Color(0xFF7C3AED).withOpacity(0.5)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  ),
+                                  onPressed: () => _showEditProfileModal(context, username, email),
+                                  icon: const Icon(Icons.edit, size: 18, color: Colors.white),
+                                  label: const Text('Edit Profile', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                ),
+                                const SizedBox(width: 12),
+                                ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent.withOpacity(0.2),
+                                    elevation: 0,
+                                    side: BorderSide(color: Colors.redAccent.withOpacity(0.5)),
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                  ),
+                                  onPressed: _logout,
+                                  icon: const Icon(Icons.logout, size: 18, color: Colors.white),
+                                  label: const Text('Logout', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -140,10 +158,38 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
                               _buildActionItem(Icons.history, 'Booking History', () => context.go('/bookings')),
                               if (user != null && (user.role == 'admin' || user.role == 'organiser'))
                                 _buildActionItem(Icons.admin_panel_settings, 'Manage Dashboard', () => context.go('/manage')),
-                              _buildActionItem(Icons.settings, 'Settings', () {}),
-                              _buildActionItem(Icons.help_outline, 'Help & Support', () {}),
-                              const SizedBox(height: 24),
-                              _buildActionItem(Icons.logout, 'Log Out', _logout, isDestructive: true),
+                              _buildActionItem(Icons.help_outline, 'Help & Support', () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  backgroundColor: const Color(0xFF13131D),
+                                  isScrollControlled: true,
+                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+                                  builder: (context) {
+                                    return Padding(
+                                      padding: EdgeInsets.only(
+                                        top: 32.0, left: 24.0, right: 24.0,
+                                        bottom: MediaQuery.of(context).viewInsets.bottom + 80,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          const Text("HELP & SUPPORT", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                                          const SizedBox(height: 24),
+                                          _buildContactRow("Anish", "+91 63660 33536", "anishbalabattuni.cs24@bmsce.ac.in"),
+                                          const SizedBox(height: 16),
+                                          _buildContactRow("Anish", "+91 99802 59715", "anishsaranath.cs24@bmsce.ac.in"),
+                                          const SizedBox(height: 16),
+                                          _buildContactRow("Anitej", "+91 91089 25690", "anitejpadyana.cs24@bmsce.ac.in"),
+                                          const SizedBox(height: 16),
+                                          _buildContactRow("Arushi", "+91 62000 28268", "arushikumari.cs24@bmsce.ac.in"),
+                                          const SizedBox(height: 48),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
                             ],
                           ),
                         ),
@@ -181,6 +227,19 @@ class _ProfilePageState extends ConsumerState<ProfilePage> with SingleTickerProv
         title: Text(title, style: TextStyle(color: color, fontSize: 16, fontWeight: FontWeight.w600)),
         trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white24, size: 16),
       ),
+    );
+  }
+
+  Widget _buildContactRow(String name, String phone, String email) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(name, style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 4),
+        Text(phone, style: const TextStyle(color: Color(0xFF00E5FF), fontSize: 14)),
+        const SizedBox(height: 4),
+        Text(email, style: const TextStyle(color: Colors.white54, fontSize: 13)),
+      ],
     );
   }
 }
@@ -248,7 +307,7 @@ class _EditProfileModalState extends ConsumerState<_EditProfileModal> {
     return Container(
       padding: EdgeInsets.only(
         top: 24, left: 24, right: 24,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 24,
+        bottom: MediaQuery.of(context).viewInsets.bottom + 120,
       ),
       decoration: const BoxDecoration(
         color: Color(0xFF1B1B26),

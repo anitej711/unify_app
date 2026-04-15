@@ -15,7 +15,7 @@ class ManageEventsPage extends ConsumerWidget {
     final eventsAsync = ref.watch(manageEventsProvider);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF06060A),
+      backgroundColor: Colors.transparent,
       body: RefreshIndicator(
         onRefresh: () async => ref.invalidate(manageEventsProvider),
         color: const Color(0xFF7C3AED),
@@ -24,7 +24,7 @@ class ManageEventsPage extends ConsumerWidget {
           physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           slivers: [
             SliverAppBar(
-              backgroundColor: const Color(0xFF06060A).withOpacity(0.9),
+              backgroundColor: Colors.transparent,
               elevation: 0,
               pinned: true,
               expandedHeight: 120,

@@ -20,7 +20,7 @@ class EventsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'SYSTEM QUERY: DIRECTORY',
+                      'DIRECTORY',
                       style: GoogleFonts.spaceMono(
                         color: Colors.white54,
                         fontSize: 10,

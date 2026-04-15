@@ -14,44 +14,56 @@ class CartPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final cartAsync = ref.watch(cartDataProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        title: const Text('Your Cart', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SafeArea(
-        child: cartAsync.when(
-          data: (cartData) {
-            num grandTotal = 0;
-            final eventsAsync = ref.watch(eventsProvider);
-            final items = cartData['items'] as List<dynamic>? ?? [];
+    return cartAsync.when(
+      data: (cartData) {
+        num grandTotal = 0;
+        final eventsAsync = ref.watch(eventsProvider);
+        final items = cartData['items'] as List<dynamic>? ?? [];
 
-            for (var item in items) {
-              final itemId = item['id'];
-              final tempBookingsAsync = ref.watch(tempBookingsProvider(itemId));
-              final bookingsCount = tempBookingsAsync.valueOrNull?.length ?? item['participants_count'] ?? 1;
+        for (var item in items) {
+          final itemId = item['id'];
+          final tempBookingsAsync = ref.watch(tempBookingsProvider(itemId));
+          final bookingsCount = tempBookingsAsync.valueOrNull?.length ?? item['participants_count'] ?? 1;
 
-              String eventId = '';
-              if (item['event_id'] != null) eventId = item['event_id'].toString();
-              else if (item['event'] is int) eventId = item['event'].toString();
-              else if (item['event'] is Map) eventId = item['event']['id'].toString();
+          String eventId = '';
+          if (item['event_id'] != null) eventId = item['event_id'].toString();
+          else if (item['event'] is int) eventId = item['event'].toString();
+          else if (item['event'] is Map) eventId = item['event']['id'].toString();
 
-              num basePrice = 0;
-              if (item['price'] != null) {
-                basePrice = num.tryParse(item['price'].toString()) ?? 0;
-              } else if (item['event'] is Map) {
-                basePrice = num.tryParse(item['event']['price']?.toString() ?? item['event']['fee']?.toString() ?? '0') ?? 0;
-              } else if (eventsAsync.valueOrNull != null) {
-                final eventMatch = eventsAsync.value!.where((e) => e.id.toString() == eventId).firstOrNull;
-                if (eventMatch != null) basePrice = eventMatch.price ?? 0;
-              }
+          num basePrice = 0;
+          if (item['price'] != null) {
+            basePrice = num.tryParse(item['price'].toString()) ?? 0;
+          } else if (item['event'] is Map) {
+            basePrice = num.tryParse(item['event']['price']?.toString() ?? item['event']['fee']?.toString() ?? '0') ?? 0;
+          } else if (eventsAsync.valueOrNull != null) {
+            final eventMatch = eventsAsync.value!.where((e) => e.id.toString() == eventId).firstOrNull;
+            if (eventMatch != null) basePrice = eventMatch.price ?? 0;
+          }
 
-              grandTotal += basePrice * bookingsCount;
-            }
+          grandTotal += basePrice * bookingsCount;
+        }
 
-            return Stack(
+        return Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            title: const Text('Your Cart', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            actions: [
+              if (items.isNotEmpty)
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Text(
+                      'CART VALUE: ₹$grandTotal',
+                      style: const TextStyle(color: Color(0xFF00E5FF), fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          body: SafeArea(
+            child: Stack(
               children: [
                 RefreshIndicator(
                   color: const Color(0xFF7C3AED),
@@ -88,17 +100,17 @@ class CartPage extends ConsumerWidget {
                             SliverToBoxAdapter(
                               child: Container(
                                 margin: const EdgeInsets.all(20).copyWith(bottom: 220), // Padding to account for both floating checkout AND floating navbar
-                                padding: const EdgeInsets.all(20),
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF1B1B26),
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(color: const Color(0xFF7C3AED).withOpacity(0.3)),
+                                  color: const Color(0xFF13131D),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.white.withOpacity(0.05)),
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    const Text('Total:', style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
-                                    Text('₹$grandTotal', style: const TextStyle(color: Color(0xFF38BDF8), fontSize: 24, fontWeight: FontWeight.bold)),
+                                    Text('SUBTOTAL(${items.length} items)', style: const TextStyle(color: Colors.white54, fontSize: 12, fontWeight: FontWeight.bold)),
+                                    Text('₹$grandTotal', style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
                                   ],
                                 ),
                               ),
@@ -126,19 +138,25 @@ class CartPage extends ConsumerWidget {
                     ),
                   ),
               ],
-            );
-          },
-          loading: () => const Center(child: CircularProgressIndicator(color: Color(0xFF7C3AED))),
-          error: (err, _) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
-                const SizedBox(height: 16),
-                const Text('Error loading cart', style: TextStyle(color: Colors.white)),
-                TextButton(onPressed: () => ref.invalidate(cartDataProvider), child: const Text('RETRY'))
-              ],
             ),
+          ),
+        );
+      },
+      loading: () => const Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(child: CircularProgressIndicator(color: Color(0xFF7C3AED))),
+      ),
+      error: (err, _) => Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
+              const SizedBox(height: 16),
+              const Text('Error loading cart', style: TextStyle(color: Colors.white)),
+              TextButton(onPressed: () => ref.invalidate(cartDataProvider), child: const Text('RETRY'))
+            ],
           ),
         ),
       ),

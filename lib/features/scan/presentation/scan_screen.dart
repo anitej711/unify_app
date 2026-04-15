@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'dart:convert';
 
@@ -88,7 +89,7 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with TickerProviderStat
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Scan QR Ticket', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text('', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.transparent,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -103,29 +104,33 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with TickerProviderStat
           
           // Custom Overlay
           Center(
-            child: Container(
-              width: 250,
-              height: 250,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: state.isSuccess
-                      ? Colors.green
-                      : state.errorMessage != null
-                          ? Colors.red
-                          : Colors.white54,
-                  width: 3,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomPaint(
+                  painter: QRScannerBorderPainter(
+                    color: state.isSuccess 
+                        ? Colors.green 
+                        : state.errorMessage != null 
+                            ? Colors.red 
+                            : const Color(0xFFFF1C7C),
+                  ),
+                  child: const SizedBox(width: 250, height: 250),
                 ),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: (state.isSuccess || state.errorMessage != null)
-                    ? [
-                        BoxShadow(
-                          color: state.isSuccess ? Colors.green.withOpacity(0.5) : Colors.red.withOpacity(0.5),
-                          blurRadius: 30,
-                          spreadRadius: 5,
-                        )
-                      ]
-                    : [],
-              ),
+                const SizedBox(height: 32),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Text(
+                    "Scan the QR ticket to mark attendance of participant",
+                    style: GoogleFonts.manrope(
+                      color: Colors.white70,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
             ),
           ),
           
@@ -185,4 +190,57 @@ class _ScanScreenState extends ConsumerState<ScanScreen> with TickerProviderStat
       ),
     );
   }
+}
+
+class QRScannerBorderPainter extends CustomPainter {
+  final Color color;
+
+  QRScannerBorderPainter({required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 6.0
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+
+    const double cornerLength = 40.0;
+    const double radius = 24.0;
+
+    // Top-Left
+    var path = Path()
+      ..moveTo(0, cornerLength)
+      ..lineTo(0, radius)
+      ..quadraticBezierTo(0, 0, radius, 0)
+      ..lineTo(cornerLength, 0);
+    canvas.drawPath(path, paint);
+
+    // Top-Right
+    path = Path()
+      ..moveTo(size.width - cornerLength, 0)
+      ..lineTo(size.width - radius, 0)
+      ..quadraticBezierTo(size.width, 0, size.width, radius)
+      ..lineTo(size.width, cornerLength);
+    canvas.drawPath(path, paint);
+
+    // Bottom-Left
+    path = Path()
+      ..moveTo(0, size.height - cornerLength)
+      ..lineTo(0, size.height - radius)
+      ..quadraticBezierTo(0, size.height, radius, size.height)
+      ..lineTo(cornerLength, size.height);
+    canvas.drawPath(path, paint);
+
+    // Bottom-Right
+    path = Path()
+      ..moveTo(size.width - cornerLength, size.height)
+      ..lineTo(size.width - radius, size.height)
+      ..quadraticBezierTo(size.width, size.height, size.width, size.height - radius)
+      ..lineTo(size.width, size.height - cornerLength);
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant QRScannerBorderPainter oldDelegate) => oldDelegate.color != color;
 }
